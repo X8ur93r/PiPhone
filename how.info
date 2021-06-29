@@ -1,0 +1,57 @@
+OS/kernel.py
+  ↳ class kernel
+    ↳ dict DRIVER       -> [DRIVERNAME]:module obj
+    ↳ dict INTERFACES   -> [DRIVERNAME]:interface obj
+    ↳ func loadDriver()
+      import [DRIVERNAME] from driver/ and save the object in DRIVER[ [DRIVERNAME] ]
+    ↳ func reloadDriver()
+      reimport the module
+    ↳ func loadDrivers()
+      get driverlist from settings/driver.json
+      load each driver with loadDriver()
+      load interface if not already (interfaces are saved in INTERFACES[ [INTERFACEMETHODE] ])
+    ↳ func reloadDrivers()
+      get driver  list from settings/driver.json
+      reload each driver with reloadDriver()
+    ↳ func main():
+      loadDrivers()
+      load APPIF
+      INTERFACES["APPIF"].loadApps()
+      self.cleanup()
+      exit()
+    ↳ func cleanup()
+      apps.cleanup()
+      cleanup interfaces in INTERFACES
+
+OS/settings/
+  ↳ driver.json -> [DRIVERNAME]:[INTERFACEMETHODE]
+
+OS/driver/
+  ↳ [DRIVERNAME].py
+    ↳ class [INTERFACEMETHODE]
+      ↳ ...
+      ↳ func cleanup()
+
+OS/apps/apps.py
+  ↳ class APPIF
+    ↳ dict APPS   -> [APPNAME]:[APPOBJ]
+    ↳ func loadApp()
+    ↳ func reloadApp()
+    ↳ func loadApps()
+    ↳ func reloadApps()
+    ↳ func getAppKwargs()
+      return [APPNAME]/main.kwargs
+    ↳ func runApp()
+      start [APPNAME]/main.app.run()
+    ↳ func cleanup()
+
+OS/apps/[APPNAME]/
+  ↳ __init__.py
+    ↳ list kwargs = [ [INTERFACEMETHODE], ... ]
+    ↳ obj app
+  ↳ ...
+  ↳ main.py
+    ↳ class [APPNAME]
+      ↳ ...
+      ↳ func cleanup()
+      ↳ func run()
