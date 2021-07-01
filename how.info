@@ -6,10 +6,11 @@ OS/kernel.py
       import [DRIVERNAME] from driver/ and save the object in DRIVER[ [DRIVERNAME] ]
     ↳ func reloadDriver()
       reimport the module
+    ↳ func loadInterface()
+      load interface if not already (interfaces are saved in INTERFACES[ [INTERFACEMETHODE] ])
     ↳ func loadDrivers()
       get driverlist from settings/driver.json
       load each driver with loadDriver()
-      load interface if not already (interfaces are saved in INTERFACES[ [INTERFACEMETHODE] ])
     ↳ func reloadDrivers()
       get driver  list from settings/driver.json
       reload each driver with reloadDriver()
@@ -25,6 +26,7 @@ OS/kernel.py
 
 OS/settings/
   ↳ driver.json -> [DRIVERNAME]:[INTERFACEMETHODE]
+  ↳ apps.json   -> [APPNAME]:[DESCRIBTION]
 
 OS/driver/
   ↳ [DRIVERNAME].py
@@ -36,9 +38,7 @@ OS/apps/apps.py
   ↳ class APPIF
     ↳ dict APPS   -> [APPNAME]:[APPOBJ]
     ↳ func loadApp()
-    ↳ func reloadApp()
     ↳ func loadApps()
-    ↳ func reloadApps()
     ↳ func getAppKwargs()
       return [APPNAME]/main.kwargs
     ↳ func runApp()

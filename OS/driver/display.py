@@ -3,8 +3,8 @@
 # autor: x8ur93r    #
 #####################
 
-from . import LCD.LCD_1in44 as LCD_1in44
-from . import LCD.LCD_Config as LCD_Config
+import driver.LCD.LCD_1in44 as LCD_1in44
+import driver.LCD.LCD_Config as LCD_Config
 from PIL import Image, ImageDraw
 
 class DISPIF:
@@ -14,10 +14,10 @@ class DISPIF:
         self.LCD_SIZE       = (128,128)
         self.BUFFER         = self.newIm()
         # init
-        self.LCD_Init(self.LCD_SCAN_DIR)
+        self.LCD.LCD_Init(self.LCD_SCAN_DIR)
         self.clear()
-    def newIm(self,c='black',s=self.LCD_SIZE):
-        return Image.New('RGB',s,c)
+    def newIm(self,c='black',s=None):
+        return Image.New('RGB',s if not s is None else self.LCD_SIZE,c)
     def getDraw(self,img):
         return ImageDraw.Draw(img)
     def draw(self,x,y,*,img=None):

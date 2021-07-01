@@ -9,27 +9,37 @@ class kernel:
     def __init__(self):
         self.DRIVER         = {}
         self.INTERFACES     = {}
-    def loadDriver(self,driver):
+    def loadDriver(self,driverd,d):
         try:
-            self.DRIVER[driver] = importlib.import_module(f'.{driver}', 'driver')
-            debug.info(f'loaded the driver:{driver}','kernel::loadDriver')
+            self.DRIVER[d] = importlib.import_module(f'.{d}', 'driver')
+            # ,'kernel::loadDriver'
+            debug.debug('kernel::loadDriver',f'loaded the driver \'{d}\'',t='+')
         except Exception as e:
-            debug.debug('kernel::loadDriver', e, f'could not load the driver:{driver}', False)
+            debug.debug('kernel::loadDriver',f'could not load the driver \'{d}\'',e,False)
+            return False
+        self.loadInterface(driverd,d)
+        return True
+    def reloadDriver(self,d):
+        try:
+            importlib.reload(self.DRIVER[d])
+            debug.debug('kernel::reloadDriver',f'reloaded the driver \'{d}\'',t='+')
+        except Exception as e:
+            debug.debug('kernel::reloadDriver',f'could not reload the driver \'{d}\'',e,False)
             return False
         return True
-    def reloadDriver(self,driver):
-        try:
-            importlib.reload(self.DRIVER[driver])
-        except Exception as e:
-            debug.debug('kernel::reloadDriver', e, f'could not reload the driver:{driver}', False)
-            return False
+    def loadInterface(self,driverd,d):
+        if driverd not in self.INTERFACES:
+            try:
+                self.INTERFACES[driverd] = self.DRIVER[d].IF()
+                debug.debug('kernel::loadInterface',f'loaded the Interface \'{driverd}\' from \'{d}\'', t='+')
+            except Exception as e:
+                debug.debug('kernel::loadInterface',f'could not load Interface \'{driverd}\' from \'{d}\'',e,False)
+                return False
         return True
     def loadDrivers(self):
         driver = tools.json.json2dict('settings/driver.json')
         for d in driver:
-            self.loadDriver(d)
-            if driver[d] not in self.INTERFACES:
-                self.INTERFACES[driver[d]] = self.DRIVER[d].IF()
+            self.loadDriver(driver[d], d)
     def reloadDrivers(self):
         driver = tools.json.json2dict('settings/driver.json')
         for d in driver:
@@ -46,6 +56,9 @@ class kernel:
             self.INTERFACES.pop(INF)
 
 k = kernel()
-k.loadDrivers()
-print(k.INTERFACES)
-print(k.DRIVER)
+k.main()
+k.reloadDrivers()
+print('interfaces:', k.INTERFACES)
+print('driver:', k.DRIVER)
+print('apps:',k.INTERFACES['APPIF'].APPS)
+k.cleanup()

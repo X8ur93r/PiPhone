@@ -25,6 +25,7 @@ class APPIF:
     def runApp(self,appname,**kwargs):
         self.APPS[appname].app.run()
     def cleanup(self):
-        for app in self.APPS:
+        for app in list(self.APPS.keys()):
+            # fix this
             self.APPS[app].app.cleanup()
             self.APPS.pop(app)
