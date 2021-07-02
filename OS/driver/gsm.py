@@ -1,12 +1,12 @@
-##################
-# gsm interface  #
-# autor: x8ur93r #
-##################
+###################
+# gsm interface   #
+# author: x8ur93r #
+###################
 
 import serial
 import os
 
-class GSMIF:
+class INTERFACE:
     def __init__(self):
         self.GSM        = None
         self.DEVPATH    = "/dev/ttyUSB0"

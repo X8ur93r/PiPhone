@@ -1,11 +1,11 @@
-##################
-# key interface  #
-# autor: x8ur93r #
-##################
+###################
+# key interface   #
+# author: x8ur93r #
+###################
 
 import RPi.GPIO as GPIO
 
-class KEYIF:
+class INTERFACE:
     def __init__(self):
         # key pins (GPIO)
         self.KEYPINS = {

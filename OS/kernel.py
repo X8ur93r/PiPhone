@@ -1,5 +1,10 @@
 #!/bin/python3
 
+###################
+# kernel          #
+# author: x8ur93r #
+###################
+
 import importlib
 import debug
 import tools.json
@@ -30,7 +35,7 @@ class kernel:
     def loadInterface(self,driverd,d):
         if driverd not in self.INTERFACES:
             try:
-                self.INTERFACES[driverd] = self.DRIVER[d].IF()
+                self.INTERFACES[driverd] = self.DRIVER[d].INTERFACE()
                 debug.debug('kernel::loadInterface',f'loaded the Interface \'{driverd}\' from \'{d}\'', t='+')
             except Exception as e:
                 debug.debug('kernel::loadInterface',f'could not load Interface \'{driverd}\' from \'{d}\'',e,False)
@@ -47,18 +52,15 @@ class kernel:
     def main(self):
         self.loadDrivers()
         self.INTERFACES["APPIF"] = apps.APPIF()
-        self.INTERFACES["APPIF"].loadApps()
+        self.INTERFACES["APPIF"].KERNEL = self
+        self.INTERFACES["APPIF"].main()
     def cleanup(self):
         self.INTERFACES["APPIF"].cleanup()
         self.INTERFACES.pop("APPIF")
-        for INF in self.INTERFACES:
+        for INF in list(self.INTERFACES.keys()):
             self.INTERFACES[INF].cleanup()
             self.INTERFACES.pop(INF)
 
 k = kernel()
 k.main()
-k.reloadDrivers()
-print('interfaces:', k.INTERFACES)
-print('driver:', k.DRIVER)
-print('apps:',k.INTERFACES['APPIF'].APPS)
 k.cleanup()

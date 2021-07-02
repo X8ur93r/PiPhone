@@ -17,7 +17,7 @@ def debug(where,info=None,error=None,ret=None,t='-'):
             print(colored(f'{ret}:', 'green'), end='')
         else:
             print(colored(f'{ret}:', 'red'), end='')
-    print(info, end='')
+    print(f'\"{info}\"', end='')
     if not error is None:
         print(f' <- error: {error}')
     else: print()
